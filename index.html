@@ -30,9 +30,9 @@
       <input type="password" id="signup-password" placeholder="Contraseña">
       <button type="submit">Registrarse</button>
     </form>
-    <form id="signin-form">
-      <input type="email" id="signin-email" placeholder="Email">
-      <input type="password" id="signin-password" placeholder="Contraseña">
+    <form id="login-form">
+      <input type="email" id="login-email" placeholder="Email">
+      <input type="password" id="login-password" placeholder="Contraseña">
       <button type="submit">Iniciar Sesión</button>
     </form>
     <script>
@@ -47,9 +47,9 @@
         event.preventDefault(); // Prevent form submission
         const email = document.getElementById("signup-email").value;
         const password = document.getElementById("signup-password").value;
-        createUserWithEmailAndPassword(auth, email, password)
+        auth.createUserWithEmailAndPassword(email, password)
           .then((userCredential) => {
-            // User signed in
+            // User signed up
             const user = userCredential.user;
             console.log("User signed up:", user);
             // ...
@@ -62,12 +62,12 @@
           });
       });
 
-      // Handles the signin form submission
-      document.getElementById("signin-form").addEventListener("submit", function(event) {
+      // Handles the login form submission
+      document.getElementById("login-form").addEventListener("submit", function(event) {
         event.preventDefault(); // Prevent form submission
-        const email = document.getElementById("signin-email").value;
-        const password = document.getElementById("signin-password").value;
-        signInWithEmailAndPassword(auth, email, password)
+        const email = document.getElementById("login-email").value;
+        const password = document.getElementById("login-password").value;
+        auth.signInWithEmailAndPassword(email, password)
           .then((userCredential) => {
             // User signed in
             const user = userCredential.user;
@@ -77,10 +77,23 @@
           .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-            console.error("Signin error:", errorMessage);
+            console.error("Login error:", errorMessage);
             // ...
           });
       });
+
+      // Handles the sign out button click
+      function terminaSesión() {
+        auth.signOut()
+          .then(() => {
+            console.log("User signed out");
+            // ...
+          })
+          .catch((error) => {
+            console.error("Signout error:", error);
+            // ...
+          });
+      }
 
       /* Rest of the code remains the same */
     </script>
