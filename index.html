@@ -82,6 +82,29 @@
           });
       });
 
+      /* Recibe una función que se invoca cada vez que hay un cambio en la
+       * autenticación y recibe el modelo con las características del usuario. */
+      auth.onAuthStateChanged(
+        /** Recibe las características del usuario o null si no ha iniciado
+         * sesión. */
+        usuarioAuth => {
+          if (usuarioAuth && usuarioAuth.email) {
+            // Usuario aceptado.
+            // @ts-ignore Muestra el email registrado.
+            email.value = usuarioAuth.email;
+            // @ts-ignore Muestra el nombre registrado.
+            nombre.value = usuarioAuth.displayName;
+            // @ts-ignore Muestra el avatar registrado.
+            avatar.src = usuarioAuth.photoURL;
+          } else {
+            // No ha iniciado sesión. Pide datos para iniciar sesión.
+            auth.signInWithRedirect(provider);
+          }
+        },
+        // Función que se invoca si hay un error al verificar el usuario.
+        procesaError
+      );
+
       /** Termina la sesión. */
       async function terminaSesión() {
         try {
